@@ -1,27 +1,13 @@
 #################################################################
-## Iro
+## MiniZinc
 ################################################################ 
 ##
-## * Press Ctrl + '+'/'-' To Zoom in
-## * Press Ctrl + S to save and recalculate... 
-## * Documents are saved to web storage.
-## * Only one save slot supported.
-## * Matches cannot span lines.
-## * Unicode chars must be defined in \u0000 to \uffff format.
-## * All matches must be contained by a single group ( ... )
-## * Look behinds not permitted, (?<= or (?<!
-## * Look forwards are permitted (?= or (?!
-## * Constants are defined as __my_const = (......)
-## * The \= format allows unescaped regular expressions
-## * Constants referenced by match \= $${__my_const}
-## * Constants can reference other constants
-## * You are free to delete all the default scopes.
-## * Twitter : ainslec , Web: http://eeyo.io/iro
+## TODO: Add description
 ##
 ################################################################
 
-name                   = mysample
-file_extensions []     = mysample;
+name                   = MiniZinc
+file_extensions []     = mzn;
 
 ################################################################
 ## Constants
