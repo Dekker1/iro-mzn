@@ -126,8 +126,8 @@ numeric : context {
     }
     : pattern {
         description     = floating point number
-        regex          \= (\b\d+(.\d+|(.\d+)?[Ee][-+]?\d+))
-        styles []       = .numeric, .numeric, .numeric;
+        regex          \= (\b\d+(?:.\d+|(?:.\d+)?[Ee][-+]?\d+))
+        styles []       = .numeric;
     }
 }
 
