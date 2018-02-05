@@ -1,6 +1,6 @@
 #################################################################
 ## MiniZinc
-################################################################ 
+################################################################
 ##
 ## TODO: Add description
 ##
@@ -21,49 +21,49 @@ __MY_CONSTANT \= (\b[a-z][a-z0-9]*)
 
 styles [] {
 
-.comment : style {
-   color                 = light_green
-   italic                = true
-   ace_scope             = comment
-   textmate_scope        = comment
-   pygments_scope        = Comment
-}
+    .comment : style {
+        color                 = light_green
+        italic                = true
+        ace_scope             = comment
+        textmate_scope        = comment
+        pygments_scope        = Comment
+    }
 
-.keyword : style {
-   color     = cyan
-   ace_scope             = keyword
-   textmate_scope        = keyword
-   pygments_scope        = Keyword
-}
+    .keyword : style {
+        color                 = cyan
+        ace_scope             = keyword
+        textmate_scope        = keyword
+        pygments_scope        = Keyword
+    }
 
-.numeric : style {
-   color                 = gold
-   ace_scope             = constant.numeric
-   textmate_scope        = constant.numeric
-   pygments_scope        = Number
-}
+    .numeric : style {
+        color                 = gold
+        ace_scope             = constant.numeric
+        textmate_scope        = constant.numeric
+        pygments_scope        = Number
+    }
 
-.punctuation : style {
-   color     = red_2
-   ace_scope             = punctuation
-   textmate_scope        = punctuation
-   pygments_scope        = Punctuation
-}
+    .punctuation : style {
+        color     = red_2
+        ace_scope             = punctuation
+        textmate_scope        = punctuation
+        pygments_scope        = Punctuation
+    }
 
-.text : style {
-   color                 = brown
-   ace_scope             = text
-   textmate_scope        = text
-   pygments_scope        = String
-}
+    .text : style {
+        color                 = brown
+        ace_scope             = text
+        textmate_scope        = text
+        pygments_scope        = String
+    }
 
-.illegal : style {
-   color                 = white
-   background_color      = red
-   ace_scope             = invalid
-   textmate_scope        = invalid
-   pygments_scope        = Generic.Error
-}
+    .illegal : style {
+        color                 = white
+        background_color      = red
+        ace_scope             = invalid
+        textmate_scope        = invalid
+        pygments_scope        = Generic.Error
+    }
 
 }
 
@@ -79,64 +79,64 @@ contexts [] {
 
 main : context {
 
-   : pattern {
-      regex          \= $${__MY_CONSTANT}
-      styles []       = .keyword;
-   }
-   
-   : include "numeric" ;
-   
-   : inline_push {
-      regex          \= (\{)
-      styles []       = .punctuation;
-      : pop {  
-         regex       \= (\})
-         styles []    = .punctuation;
-      }
-      : include "main" ;
-   }
-   
-   : pattern {
-      regex          \= (;)
-      styles []       = .punctuation;
-   }
-   
-   : inline_push {
-      regex          \= (\")
-      styles []       = .punctuation;
-      default_style   = .text
-      : pop {
-         regex       \= (\")
-         styles []    = .punctuation;
-      }
-   }
-   
-   : inline_push {
-      regex          \= (\()
-      styles []       = .punctuation;
-      : pop {
-         regex       \= (\))
-         styles []    = .punctuation;
-      }
-      : include "numeric" ;
-      : pattern {
-         regex       \= (,)
-         styles []    = .punctuation;
-      }
-   }
-   
-   : include "multi_line_comment" ;
-   
-   : pattern {
-      regex          \= (//.*)
-      styles []       = .comment;
-   }
-   
-   : pattern {
-      regex          \= ([^\s])
-      styles []       = .illegal;
-   }
-   
+    : pattern {
+        regex          \= $${__MY_CONSTANT}
+        styles []       = .keyword;
+    }
+
+    : include "numeric" ;
+
+    : inline_push {
+        regex          \= (\{)
+        styles []       = .punctuation;
+        : pop {
+            regex       \= (\})
+            styles []    = .punctuation;
+        }
+        : include "main" ;
+    }
+
+    : pattern {
+        regex          \= (;)
+        styles []       = .punctuation;
+    }
+
+    : inline_push {
+        regex          \= (\")
+        styles []       = .punctuation;
+        default_style   = .text
+        : pop {
+            regex       \= (\")
+            styles []    = .punctuation;
+        }
+    }
+
+    : inline_push {
+        regex          \= (\()
+        styles []       = .punctuation;
+        : pop {
+            regex       \= (\))
+            styles []    = .punctuation;
+        }
+        : include "numeric" ;
+        : pattern {
+            regex       \= (,)
+            styles []    = .punctuation;
+        }
+    }
+
+    : include "multi_line_comment";
+
+    : pattern {
+        regex          \= (//.*)
+        styles []       = .comment;
+    }
+
+    : pattern {
+        regex          \= ([^\s])
+        styles []       = .illegal;
+    }
+
 }
 
 #################################################
@@ -148,10 +148,10 @@ main : context {
 ###########################################
 
 numeric : context {
-   : pattern {
-      regex          \= (\b\d+)
-      styles []       = .numeric;
-   }
+    : pattern {
+        regex          \= (\b\d+)
+        styles []       = .numeric;
+    }
 }
 
 ###########################################
@@ -159,16 +159,16 @@ numeric : context {
 ###########################################
 
 multi_line_comment : context {
-   description        = multiline
-   : inline_push {
-      regex          \= (/\*)
-      styles []       = .comment;
-      default_style   = .comment
-      : pop {
-         regex       \= (\*/)
-         styles []    = .comment;
-      }
-   }
+    description        = multiline
+    : inline_push {
+        regex          \= (/\*)
+        styles []       = .comment;
+        default_style   = .comment
+        : pop {
+            regex       \= (\*/)
+            styles []    = .comment;
+        }
+    }
 }
-   
+
 }
