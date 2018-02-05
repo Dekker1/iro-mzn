@@ -78,53 +78,9 @@ contexts [] {
 ##############################################
 
 main : context {
-
-    : pattern {
-        regex          \= $${__MY_CONSTANT}
-        styles []       = .keyword;
-    }
-
-    : include "numeric" ;
-
-    : inline_push {
-        regex          \= (\{)
-        styles []       = .punctuation;
-        : pop {
-            regex       \= (\})
-            styles []    = .punctuation;
-        }
-        : include "main" ;
-    }
-
-    : pattern {
-        regex          \= (;)
-        styles []       = .punctuation;
-    }
-
-    : inline_push {
-        regex          \= (\")
-        styles []       = .punctuation;
-        default_style   = .text
-        : pop {
-            regex       \= (\")
-            styles []    = .punctuation;
-        }
-    }
-
-    : inline_push {
-        regex          \= (\()
-        styles []       = .punctuation;
-        : pop {
-            regex       \= (\))
-            styles []    = .punctuation;
-        }
-        : include "numeric" ;
-        : pattern {
-            regex       \= (,)
-            styles []    = .punctuation;
-        }
-    }
-
+    #######################################
+    ## Comment Patterns
+    #######################################
     : include "multi_line_comment";
 
     : pattern {
@@ -132,10 +88,10 @@ main : context {
         styles []       = .comment;
     }
 
-    : pattern {
-        regex          \= ([^\s])
-        styles []       = .illegal;
-    }
+    #######################################
+    ## Literal Patterns
+    #######################################
+    : include "numeric";
 
 }
 
@@ -149,10 +105,32 @@ main : context {
 
 numeric : context {
     : pattern {
+        description     = integer number
         regex          \= (\b\d+)
         styles []       = .numeric;
     }
+    : pattern {
+        description     = octal integer number
+        regex          \= (\b0o[0-7]+)
+        styles []       = .numeric;
+    }
+    : pattern {
+        description     = hexadecimal number
+        regex          \= (\b0x[0-9A-Fa-f]+)
+        styles []       = .numeric;
+    }
+    : pattern {
+        description     = hexadecimal number
+        regex          \= (\b0x[0-9A-Fa-f]+)
+        styles []       = .numeric;
+    }
+    : pattern {
+        description     = floating point number
+        regex          \= (\b\d+(.\d+|(.\d+)?[Ee][-+]?\d+))
+        styles []       = .numeric, .numeric, .numeric;
+    }
 }
+
 
 ###########################################
 ## Multi Line Comment Context
