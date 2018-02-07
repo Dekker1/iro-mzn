@@ -164,7 +164,7 @@ main : context {
 
     : pattern {
         description     = logical operator
-        regex          \= (\bnot\b|<->|->|<-|\\/|xor|/\\)
+        regex          \= (\bnot\b|<->|->|<-|\\/|\bxor\b|/\\)
         styles []       = .operator;
     }
 
