@@ -19,6 +19,7 @@ __id \= (\b[A-Za-z][A-Za-z0-9_]*|'[^']*')
 ## Styles
 ################################################################
 
+# TODO: Better colors for debugging purposes
 styles [] {
 
     .builtin : style {
@@ -43,15 +44,22 @@ styles [] {
         pygments_scope        = Literal
     }
 
+    .escape_char : style {
+        color                 = red
+        ace_scope             = constant.character.escape
+        textmate_scope        = constant.character.escape
+        pygments_scope        = String.Escape
+    }
+
     .function : style {
-        color                 = purple
+        color                 = green
         ace_scope             = entity.name.function
         textmate_scope        = entity.name.function
         pygments_scope        = Name.Function
     }
 
     .global : style {
-        color                 = green
+        color                 = light_green
         ace_scope             = support.function
         textmate_scope        = support.function
         pygments_scope        = Name.Builtin.Pseudo
@@ -87,10 +95,24 @@ styles [] {
     }
 
     .punctuation : style {
-        color                 = red_2
+        color                 = light_yellow
         ace_scope             = punctuation
         textmate_scope        = punctuation
         pygments_scope        = Punctuation
+    }
+
+    .string : style {
+        color                 = white
+        ace_scope             = string
+        textmate_scope        = string
+        pygments_scope        = String
+    }
+
+    .type : style {
+        color                 = blue
+        ace_scope             = storage.type
+        textmate_scope        = storage.type
+        pygments_scope        = Keyword.Type
     }
 
     .variable : style {
@@ -119,7 +141,8 @@ main : context {
     : include "multi_line_comment";
 
     : pattern {
-        regex          \= (//.*)
+        description     = line comment
+        regex          \= (%.*)
         styles []       = .comment;
     }
 
@@ -127,7 +150,220 @@ main : context {
     ## Literal Patterns
     #######################################
     : include "numeric";
+    : include "string";
+    
+    : pattern {
+        description     = Boolean literal
+        regex          \= (\b(?:true|false)\b)
+        styles []       = .constant;
+    }
 
+    #######################################
+    ## Operator Patterns
+    #######################################
+
+    : pattern {
+        description     = logical operator
+        regex          \= (\bnot\b|<->|->|<-|\\/|xor|/\\)
+        styles []       = .operator;
+    }
+
+    : pattern {
+        description     = equality operator
+        regex          \= (<|>|<=|>=|==|=|!=)
+        styles []       = .operator;
+    }
+
+    : pattern {
+        description     = linear operator
+        regex          \= (\+|-|\*|/|\bdiv\b|\bmod\b)
+        styles []       = .operator;
+    }
+
+    : pattern {
+        description     = set operator
+        regex          \= (\b(?:in|subset|superset|union|diff|symdiff|intersect)\b|\.\.)
+        styles []       = .operator;
+    }
+
+    #######################################
+    ## Punctuation Patterns
+    #######################################
+
+    : pattern {
+        description     = terminator
+        regex          \= (;)
+        styles []       = .punctuation;
+    }
+
+    : pattern {
+        regex          \= (:)
+        styles []       = .punctuation;
+    }
+
+    : pattern {
+        regex          \= (,)
+        styles []       = .punctuation;
+    }
+
+    : inline_push {
+        regex          \= (\{)
+        styles []       = .punctuation;
+        : pop {
+            regex      \= (\})
+            styles []   = .punctuation;
+        }
+        : pattern {
+            regex    \= (\|)
+            styles [] = .punctuation;
+        }
+        : include "main";
+    }
+
+    : inline_push {
+        regex          \= (\[)
+        styles []       = .punctuation;
+        : pop {
+            regex      \= (\])
+            styles []   = .punctuation;
+        }
+        : pattern {
+            regex    \= (\|)
+            styles [] = .punctuation;
+        }
+        : include "main";
+    }
+
+    : inline_push {
+        regex          \= (\()
+        styles []       = .punctuation;
+        : pop {
+            regex      \= (\))
+            styles []   = .punctuation;
+        }
+        : include "main";
+    }
+
+    : pattern {
+        description     = unmatched bracket
+        regex          \= (\}|\]|\))
+        styles[]        = .illegal;
+    }
+
+    : pattern {
+        description     = illegal pipe character
+        regex          \= (\|)
+        styles[]        = .illegal;
+    }
+
+    #######################################
+    ## Keyword Patterns
+    #######################################
+
+    # TODO: Check list: ann, annotation, any, array, bool, case, constraint, diff, div, else, elseif, endif, enum, false, float, function, if, in, include, int, intersect, let, list, maximize, minimize, mod, not, of, op, output, par, predicate, record, satisfy, set, solve, string, subset, superset, symdiff, test, then, true, tuple, type, union, var, where, xor
+
+    : pattern {
+        description     = item keyword
+        regex          \= (\b(?:ann|annotation|any|constraint|function|in|include|list|op|output|minimize|maximize|predicate|record|satisfy|solve|test|type)\b)
+        styles []       = .keyword;
+    }
+
+    : pattern {
+        description     = type keyword
+        regex          \= (\b(?:array|set|bool|enum|float|int|of|par|string|tuple|var)\b)
+        styles []       = .type;
+    }
+
+    : pattern {
+        description     = expression keyword
+        regex          \= (\b(?:for|forall|if|then|elseif|else|endif|where)\b)
+        styles []       = .keyword;
+    }
+    
+    #######################################
+    ## Library Patterns
+    #######################################
+
+    : pattern {
+        description     = builtin function (stdlib)
+        regex          \= (\b(?:abort|abs|acosh|array_intersect|array_union|array1d|array2d|array3d|array4d|array5d|array6d|asin|assert|atan|bool2int|card|ceil|concat|cos|cosh|dom|dom_array|dom_size|fix|exp|floor|index_set|index_set_1of2|index_set_2of2|index_set_1of3|index_set_2of3|index_set_3of3|int2float|is_fixed|join|lb|lb_array|length|ln|log|log2|log10|min|max|pow|product|round|set2array|show|show_int|show_float|sin|sinh|sqrt|sum|tan|tanh|trace|ub|ub_array)\b)
+        styles []       = .builtin;
+    }
+    
+    : pattern {
+        description     = general predicates (globals)
+        regex          \= (\b(?:circuit|disjoint|maximum|maximum_arg|member|minimum|minimum_arg|network_flow|network_flow_cost|partition_set|range|roots|sliding_sum|subcircuit|sum_pred)\b)
+        styles []       = .global;
+    }
+
+    : pattern {
+        description     = all different and related constraints (globals)
+        regex          \= (\b(?:alldifferent|all_different|all_disjoint|all_equal|alldifferent_except_0|nvalue|symmetric_all_different)\b)
+        styles []       = .global;
+    }
+
+    : pattern {
+        description     = lexicographic constraints (globals)
+        regex          \= (\b(?:lex2|lex_greater|lex_greatereq|lex_less|lex_lesseq|strict_lex2|value_precede|value_precede_chain)\b)
+        styles []       = .global;
+    }
+
+    : pattern {
+        description     = sorting constraints (globals)
+        regex          \= (\b(?:arg_sort|decreasing|increasing|sort)\b)
+        styles []       = .global;
+    }
+
+    : pattern {
+        description     = channeling constraints (globals)
+        regex          \= (\b(?:int_set_channel|inverse|inverse_set|link_set_to_booleans)\b)
+        styles []       = .global;
+    }
+
+    : pattern {
+        description     = counting constraints (globals)
+        regex          \= (\b(?:among|at_least|at_most|at_most1|count|count_eq|count_geq|count_gt|count_leq|count_lt|count_neq|distribute|exactly|global_cardinality|global_cardinality_closed|global_cardinality_low_up|global_cardinality_low_up_closed)\b)
+        styles []       = .global;
+    }
+
+    : pattern {
+        description     = packing constraints (globals)
+        regex          \= (\b(?:bin_packing|bin_packing_capa|bin_packing_load|diffn|diffn_k|diffn_nonstrict|diffn_nonstrict_k|geost|geost_bb|geost_smallest_bb|knapsack)\b)
+        styles []       = .global;
+    }
+    
+    : pattern {
+        description     = scheduling constraints (globals)
+        regex          \= (\b(?:alternative|cumulative|disjunctive|disjunctive_strict|span)\b)
+        styles []       = .global;
+    }
+
+    : pattern {
+        description     = extensional constraints (globals)
+        regex          \= (\b(?:regular|regular_nfa|table)\b)
+        styles []       = .global;
+    }
+
+    #######################################
+    ## Identifier Patterns
+    #######################################
+
+    : inline_push {
+        description     = function
+        regex          \= $${__id}(\()
+        styles []       = .function, .punctuation;
+        : pop {
+            regex       \= (\))
+            styles []    = .punctuation;
+        }
+        :include "main";
+    }
+
+    : pattern {
+        description     = variable
+        regex          \= $${__id}
+        styles []       = .variable;
+    }
 }
 
 #################################################
@@ -135,15 +371,27 @@ main : context {
 #################################################
 
 ###########################################
+## Multi Line Comment Context
+###########################################
+
+multi_line_comment : context {
+    description        = multi line comment
+    : inline_push {
+        regex          \= (/\*)
+        styles []       = .comment;
+        default_style   = .comment
+        : pop {
+            regex       \= (\*/)
+            styles []    = .comment;
+        }
+    }
+}
+
+###########################################
 ## Numeric Context
 ###########################################
 
 numeric : context {
-    : pattern {
-        description     = integer number
-        regex          \= (\b\d+)
-        styles []       = .numeric;
-    }
     : pattern {
         description     = octal integer number
         regex          \= (\b0o[0-7]+)
@@ -161,26 +409,45 @@ numeric : context {
     }
     : pattern {
         description     = floating point number
-        regex          \= (\b\d+(?:.\d+|(?:.\d+)?[Ee][-+]?\d+))
+        regex          \= (\b\d+(?:(?:.\d+)?[Ee][-+]?\d+|.\d+))
+        styles []       = .numeric;
+    }
+    : pattern {
+        description     = integer number
+        regex          \= (\b\d+)
         styles []       = .numeric;
     }
 }
 
-
 ###########################################
-## Multi Line Comment Context
+## String Context
 ###########################################
 
-multi_line_comment : context {
-    description        = multiline
+string : context {
     : inline_push {
-        regex          \= (/\*)
-        styles []       = .comment;
-        default_style   = .comment
-        : pop {
-            regex       \= (\*/)
-            styles []    = .comment;
-        }
+         regex       \= (\")
+         styles []    = .string;
+         : pop {
+            regex    \= (\")
+            styles [] = .string;
+         }
+         : inline_push {
+            regex    \= (\\\()
+            styles [] = .punctuation;
+            : pop {
+                regex    \= (\))
+                styles [] = .punctuation;
+            }
+            : include "main";
+         }
+         : pattern {
+            regex    \= (\\["'\\nrvt])
+            styles [] = .escape_char;
+         }
+         : pattern {
+            regex    \= ([^\"\\]+)
+            styles [] = .string;
+         }
     }
 }
 
