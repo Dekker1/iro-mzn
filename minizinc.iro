@@ -21,18 +21,54 @@ __id \= (\b[A-Za-z][A-Za-z0-9_]*|'[^']*')
 
 styles [] {
 
-    .comment : style {
+    .builtin : style {
         color                 = light_green
+        ace_scope             = support.function
+        textmate_scope        = support.function
+        pygments_scope        = Name.Builtin
+    }
+
+    .comment : style {
+        color                 = yellow
         italic                = true
         ace_scope             = comment
         textmate_scope        = comment
         pygments_scope        = Comment
     }
 
+    .constant : style {
+        color                 = white
+        ace_scope             = constant.language
+        textmate_scope        = constant.language
+        pygments_scope        = Literal
+    }
+
+    .function : style {
+        color                 = purple
+        ace_scope             = entity.name.function
+        textmate_scope        = entity.name.function
+        pygments_scope        = Name.Function
+    }
+
+    .global : style {
+        color                 = green
+        ace_scope             = support.function
+        textmate_scope        = support.function
+        pygments_scope        = Name.Builtin.Pseudo
+    }
+
+    .illegal : style {
+        color                 = white
+        background_color      = red
+        ace_scope             = invalid
+        textmate_scope        = invalid
+        pygments_scope        = Generic.Error
+    }
+
     .keyword : style {
         color                 = cyan
-        ace_scope             = keyword
-        textmate_scope        = keyword
+        ace_scope             = keyword.control
+        textmate_scope        = keyword.control
         pygments_scope        = Keyword
     }
 
@@ -43,26 +79,25 @@ styles [] {
         pygments_scope        = Number
     }
 
+    .operator : style {
+        color                 = orange
+        ace_scope             = keyword.operator
+        textmate_scope        = keyword.operator
+        pygments_scope        = Operator
+    }
+
     .punctuation : style {
-        color     = red_2
+        color                 = red_2
         ace_scope             = punctuation
         textmate_scope        = punctuation
         pygments_scope        = Punctuation
     }
 
-    .text : style {
-        color                 = brown
-        ace_scope             = text
-        textmate_scope        = text
-        pygments_scope        = String
-    }
-
-    .illegal : style {
-        color                 = white
-        background_color      = red
-        ace_scope             = invalid
-        textmate_scope        = invalid
-        pygments_scope        = Generic.Error
+    .variable : style {
+        color                 = violet
+        ace_scope             = variable
+        textmate_scope        = variable
+        pygments_scope        = Name.Variable
     }
 
 }
