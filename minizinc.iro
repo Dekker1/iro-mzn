@@ -68,8 +68,8 @@ styles [] {
     .illegal : style {
         color                 = white
         background_color      = red
-        ace_scope             = invalid
-        textmate_scope        = invalid
+        ace_scope             = invalid.illegal
+        textmate_scope        = invalid.illegal
         pygments_scope        = Generic.Error
     }
 
