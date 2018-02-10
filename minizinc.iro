@@ -260,24 +260,28 @@ main : context {
     ## Keyword Patterns
     #######################################
 
-    # TODO: Check list: ann, annotation, any, array, bool, case, constraint, diff, div, else, elseif, endif, enum, false, float, function, if, in, include, int, intersect, let, list, maximize, minimize, mod, not, of, op, output, par, predicate, record, satisfy, set, solve, string, subset, superset, symdiff, test, then, true, tuple, type, union, var, where, xor
-
     : pattern {
         description     = item keyword
-        regex          \= (\b(?:ann|annotation|any|constraint|function|in|include|list|op|output|minimize|maximize|predicate|record|satisfy|solve|test|type)\b)
+        regex          \= (\b(?:annotation|constraint|function|include|op|output|minimize|maximize|predicate|satisfy|solve|test|type)\b)
         styles []       = .keyword;
     }
 
     : pattern {
         description     = type keyword
-        regex          \= (\b(?:array|set|bool|enum|float|int|of|par|string|tuple|var)\b)
+        regex          \= (\b(?:ann|array|bool|enum|float|int|list|of|par|set|string|tuple|var)\b)
         styles []       = .type;
     }
 
     : pattern {
         description     = expression keyword
-        regex          \= (\b(?:for|forall|if|then|elseif|else|endif|where)\b)
+        regex          \= (\b(?:for|forall|if|then|elseif|else|endif|where|let|in)\b)
         styles []       = .keyword;
+    }
+
+    : pattern {
+        description     = reserved identifiers
+        regex          \= (\b(?:any|case|op|record)\b)
+        styles []       = .illegal;
     }
     
     #######################################
