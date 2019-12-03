@@ -51,6 +51,13 @@ styles [] {
         pygments_scope        = String.Escape
     }
 
+    .escaped : style {
+        color                 = brown
+        ace_scope             = text
+        textmate_scope        = text
+        pygments_scope        = Generic.Inserted
+    }
+
     .function : style {
         color                 = green
         ace_scope             = entity.name.function
@@ -144,6 +151,17 @@ main : context {
         description     = line comment
         regex          \= (%.*)
         styles []       = .comment;
+    }
+
+    # Escape to non-MiniZinc code or comments
+    : inline_push {
+        regex          \= (@)
+        styles []       = .escaped;
+        default_style   = .escaped
+        : pop {
+            regex       \= (@)
+            styles []    = .escaped;
+        }
     }
 
     #######################################
