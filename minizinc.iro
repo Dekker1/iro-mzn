@@ -6,7 +6,7 @@
 ##
 ################################################################
 
-name                   = mzn
+name                   = MiniZinc
 file_extensions []     = mzn, fzn, dzn;
 
 ################################################################
@@ -182,7 +182,7 @@ main : context {
 
     : pattern {
         description     = set operator
-        regex          \= (\b(?:in|subset|superset|union|diff|symdiff|intersect)\b|\.\.)
+        regex          \= (\b(?:in|subset|superset|union|diff|symdiff|intersect|\.\.)\b)
         styles []       = .operator;
     }
 
